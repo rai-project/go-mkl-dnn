@@ -1,1 +1,6 @@
-# RAI Project Repo Template
+# MKLDNN
+
+# Profiling
+
+export MKLDNN_VERBOSE=1
+

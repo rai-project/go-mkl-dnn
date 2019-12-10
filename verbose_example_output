@@ -1,0 +1,52 @@
+mkldnn_verbose,info,Intel(R) MKL-DNN v0.19.0 (Git Hash 41bee20d7eb4a67feeeeb8d597b3598994eb1959),Intel(R) Advanced Vector Extensions 512 (Intel(R) AVX-512) with AVX512BW, AVX512VL, and AVX512DQ extensions
+mkldnn_verbose,exec,reorder,jit:uni,undef,in:f32_oihw out:f32_Ohwi16o,num:1,64x3x11x11,0.0219727
+mkldnn_verbose,exec,convolution,jit:avx512_common,forward_inference,fsrc:nchw fwei:Ohwi16o fbia:x fdst:nChw16c,alg:convolution_direct,mb1_ic3oc64_ih224oh55kh11sh4dh0ph2_iw224ow55kw11sw4dw0pw2,0.218994
+mkldnn_verbose,exec,reorder,jit:uni,undef,in:f32_oihw out:f32_Ohwi16o,num:1,64x3x11x11,0.0148926
+mkldnn_verbose,exec,eltwise,jit:avx512_common,forward_inference,fdata:nChw16c fdiff:undef,alg:eltwise_relu,mb1ic64ih55iw55,0.0209961
+mkldnn_verbose,exec,pooling,jit:avx512_common,forward_inference,fdata:nChw16c fws:undef,alg:pooling_max,mb1ic64_ih55oh27kh3sh2ph0_iw55ow27kw3sw2pw0,0.0239258
+mkldnn_verbose,exec,reorder,jit:uni,undef,in:f32_oihw out:f32_OIhw16i16o,num:1,192x64x5x5,0.105957
+mkldnn_verbose,exec,convolution,jit:avx512_common,forward_inference,fsrc:nChw16c fwei:OIhw16i16o fbia:x fdst:nChw16c,alg:convolution_direct,mb1_ic64oc192_ih27oh27kh5sh1dh0ph2_iw27ow27kw5sw1dw0pw2,0.460938
+mkldnn_verbose,exec,reorder,jit:uni,undef,in:f32_oihw out:f32_OIhw16i16o,num:1,192x64x5x5,0.11084
+mkldnn_verbose,exec,eltwise,jit:avx512_common,forward_inference,fdata:nChw16c fdiff:undef,alg:eltwise_relu,mb1ic192ih27iw27,0.0109863
+mkldnn_verbose,exec,pooling,jit:avx512_common,forward_inference,fdata:nChw16c fws:undef,alg:pooling_max,mb1ic192_ih27oh13kh3sh2ph0_iw27ow13kw3sw2pw0,0.0109863
+mkldnn_verbose,exec,reorder,jit:uni,undef,in:f32_oihw out:f32_OIhw16i16o,num:1,384x192x3x3,0.204102
+mkldnn_verbose,exec,convolution,jit:avx512_common,forward_inference,fsrc:nChw16c fwei:OIhw16i16o fbia:x fdst:nChw16c,alg:convolution_direct,mb1_ic192oc384_ih13oh13kh3sh1dh0ph1_iw13ow13kw3sw1dw0pw1,0.256104
+mkldnn_verbose,exec,reorder,jit:uni,undef,in:f32_oihw out:f32_OIhw16i16o,num:1,384x192x3x3,0.0600586
+mkldnn_verbose,exec,eltwise,jit:avx512_common,forward_inference,fdata:nChw16c fdiff:undef,alg:eltwise_relu,mb1ic384ih13iw13,0.00805664
+mkldnn_verbose,exec,reorder,jit:uni,undef,in:f32_oihw out:f32_OIhw16i16o,num:1,256x384x3x3,0.248047
+mkldnn_verbose,exec,convolution,jit:avx512_common,forward_inference,fsrc:nChw16c fwei:OIhw16i16o fbia:x fdst:nChw16c,alg:convolution_direct,mb1_ic384oc256_ih13oh13kh3sh1dh0ph1_iw13ow13kw3sw1dw0pw1,0.302979
+mkldnn_verbose,exec,reorder,jit:uni,undef,in:f32_oihw out:f32_OIhw16i16o,num:1,256x384x3x3,0.25708
+mkldnn_verbose,exec,eltwise,jit:avx512_common,forward_inference,fdata:nChw16c fdiff:undef,alg:eltwise_relu,mb1ic256ih13iw13,0.00708008
+mkldnn_verbose,exec,reorder,jit:uni,undef,in:f32_oihw out:f32_OIhw16i16o,num:1,256x256x3x3,0.178955
+mkldnn_verbose,exec,convolution,jit:avx512_common,forward_inference,fsrc:nChw16c fwei:OIhw16i16o fbia:x fdst:nChw16c,alg:convolution_direct,mb1_ic256oc256_ih13oh13kh3sh1dh0ph1_iw13ow13kw3sw1dw0pw1,0.208984
+mkldnn_verbose,exec,reorder,jit:uni,undef,in:f32_oihw out:f32_OIhw16i16o,num:1,256x256x3x3,0.170898
+mkldnn_verbose,exec,eltwise,jit:avx512_common,forward_inference,fdata:nChw16c fdiff:undef,alg:eltwise_relu,mb1ic256ih13iw13,0.00585938
+mkldnn_verbose,exec,pooling,jit:avx512_common,forward_inference,fdata:nChw16c fws:undef,alg:pooling_max,mb1ic256_ih13oh6kh3sh2ph0_iw13ow6kw3sw2pw0,0.0109863
+mkldnn_verbose,exec,reorder,jit:uni,undef,in:f32_nChw16c out:f32_nchw,num:1,1x256x6x6,0.0090332
+mkldnn_verbose,exec,reorder,simple:any,undef,in:f32_nchw out:f32_nchw,num:1,1x256x6x6,0.00488281
+mkldnn_verbose,exec,inner_product,gemm:blas,forward_inference,fsrc:nc fwei:oi fbia:x fdst:nc,,mb1ic9216oc4096,24.0132
+mkldnn_verbose,exec,eltwise,jit:avx512_common,forward_inference,fdata:nc fdiff:undef,alg:eltwise_relu,mb1ic4096,0.0109863
+mkldnn_verbose,exec,inner_product,gemm:blas,forward_inference,fsrc:nc fwei:oi fbia:x fdst:nc,,mb1ic4096oc4096,1.65503
+mkldnn_verbose,exec,eltwise,jit:avx512_common,forward_inference,fdata:nc fdiff:undef,alg:eltwise_relu,mb1ic4096,0.0090332
+mkldnn_verbose,exec,inner_product,gemm:blas,forward_inference,fsrc:nc fwei:oi fbia:x fdst:nc,,mb1ic4096oc1000,0.407959
+mkldnn_verbose,exec,convolution,jit:avx512_common,forward_inference,fsrc:nchw fwei:Ohwi16o fbia:x fdst:nChw16c,alg:convolution_direct,mb1_ic3oc64_ih224oh55kh11sh4dh0ph2_iw224ow55kw11sw4dw0pw2,0.283936
+mkldnn_verbose,exec,eltwise,jit:avx512_common,forward_inference,fdata:nChw16c fdiff:undef,alg:eltwise_relu,mb1ic64ih55iw55,0.0100098
+mkldnn_verbose,exec,pooling,jit:avx512_common,forward_inference,fdata:nChw16c fws:undef,alg:pooling_max,mb1ic64_ih55oh27kh3sh2ph0_iw55ow27kw3sw2pw0,0.0119629
+mkldnn_verbose,exec,convolution,jit:avx512_common,forward_inference,fsrc:nChw16c fwei:OIhw16i16o fbia:x fdst:nChw16c,alg:convolution_direct,mb1_ic64oc192_ih27oh27kh5sh1dh0ph2_iw27ow27kw5sw1dw0pw2,0.721924
+mkldnn_verbose,exec,eltwise,jit:avx512_common,forward_inference,fdata:nChw16c fdiff:undef,alg:eltwise_relu,mb1ic192ih27iw27,0.00805664
+mkldnn_verbose,exec,pooling,jit:avx512_common,forward_inference,fdata:nChw16c fws:undef,alg:pooling_max,mb1ic192_ih27oh13kh3sh2ph0_iw27ow13kw3sw2pw0,0.0129395
+mkldnn_verbose,exec,convolution,jit:avx512_common,forward_inference,fsrc:nChw16c fwei:OIhw16i16o fbia:x fdst:nChw16c,alg:convolution_direct,mb1_ic192oc384_ih13oh13kh3sh1dh0ph1_iw13ow13kw3sw1dw0pw1,0.361084
+mkldnn_verbose,exec,eltwise,jit:avx512_common,forward_inference,fdata:nChw16c fdiff:undef,alg:eltwise_relu,mb1ic384ih13iw13,0.00610352
+mkldnn_verbose,exec,convolution,jit:avx512_common,forward_inference,fsrc:nChw16c fwei:OIhw16i16o fbia:x fdst:nChw16c,alg:convolution_direct,mb1_ic384oc256_ih13oh13kh3sh1dh0ph1_iw13ow13kw3sw1dw0pw1,0.499023
+mkldnn_verbose,exec,eltwise,jit:avx512_common,forward_inference,fdata:nChw16c fdiff:undef,alg:eltwise_relu,mb1ic256ih13iw13,0.00610352
+mkldnn_verbose,exec,convolution,jit:avx512_common,forward_inference,fsrc:nChw16c fwei:OIhw16i16o fbia:x fdst:nChw16c,alg:convolution_direct,mb1_ic256oc256_ih13oh13kh3sh1dh0ph1_iw13ow13kw3sw1dw0pw1,0.317139
+mkldnn_verbose,exec,eltwise,jit:avx512_common,forward_inference,fdata:nChw16c fdiff:undef,alg:eltwise_relu,mb1ic256ih13iw13,0.00585938
+mkldnn_verbose,exec,pooling,jit:avx512_common,forward_inference,fdata:nChw16c fws:undef,alg:pooling_max,mb1ic256_ih13oh6kh3sh2ph0_iw13ow6kw3sw2pw0,0.00708008
+mkldnn_verbose,exec,reorder,jit:uni,undef,in:f32_nChw16c out:f32_nchw,num:1,1x256x6x6,0.00805664
+mkldnn_verbose,exec,reorder,simple:any,undef,in:f32_nchw out:f32_nchw,num:1,1x256x6x6,0.00610352
+mkldnn_verbose,exec,inner_product,gemm:blas,forward_inference,fsrc:nc fwei:oi fbia:x fdst:nc,,mb1ic9216oc4096,3.75903
+mkldnn_verbose,exec,eltwise,jit:avx512_common,forward_inference,fdata:nc fdiff:undef,alg:eltwise_relu,mb1ic4096,0.00488281
+mkldnn_verbose,exec,inner_product,gemm:blas,forward_inference,fsrc:nc fwei:oi fbia:x fdst:nc,,mb1ic4096oc4096,1.59399
+mkldnn_verbose,exec,eltwise,jit:avx512_common,forward_inference,fdata:nc fdiff:undef,alg:eltwise_relu,mb1ic4096,0.00610352
+mkldnn_verbose,exec,inner_product,gemm:blas,forward_inference,fsrc:nc fwei:oi fbia:x fdst:nc,,mb1ic4096oc1000,0.394043
+2019/12/09 19:41:18 Binomial took 11.729613ms
