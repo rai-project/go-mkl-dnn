@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
-	dnnlparser "parser"
 	"strconv"
+
+	dnnl "github.com/rai-project/go-mkl-dnn"
 )
 
 func main() {
-	layerinfo := dnnlparser.ParseVerbose("../verbose_example_output")
+	layerinfo := dnnl.ParseVerbose("verbose_example_output")
 	for i := range layerinfo {
 		fmt.Println("layer " + strconv.Itoa(i+1))
 		fmt.Println("Operation name: " + layerinfo[i].OpName)
