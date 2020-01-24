@@ -28,9 +28,9 @@ var (
 // Propogation typeforward_inference
 // Metadata: gemm:blas, mb1ic9216oc4096
 type TraceEvent struct {
-	OpName      string            // primitive kind
-	Timestamp   int64             `json:"ts,omitempty"`
-	ExeTime     time.Duration     `json:"dur,omitempty"`
+	OpName      string // primitive kind
+	Timestamp   int64
+	ExeTime     time.Duration
 	DataFormat  string            // input/output data format
 	Propogation string            // propogation
 	MetaData    map[string]string // meta data
