@@ -1,6 +1,7 @@
 package dnnl
 
 import (
+	"fmt"
 	"context"
 	"os"
 	"strconv"
@@ -61,8 +62,11 @@ func NewProfile(tmpDir string) (*Trace, error) {
 	if err != nil {
 		return nil, errors.Errorf("cannot create temporary file in %v", tmpDir)
 	}
+	verboseOut := ParseVerbose("/Users/apple/go-mkl-dnn/example/verbose_example_output")
+	fmt.Println(filename)
+	fmt.Println(startTime)
 	return &Trace{
-		TraceEvents: TraceEvents{},
+		TraceEvents: verboseOut,
 		filename:    filename,
 		StartTime:   startTime,
 		EndTime:     startTime,
@@ -78,8 +82,8 @@ func (t *Trace) Publish(ctx context.Context, lvl tracer.Level, opts ...opentraci
 		tags := opentracing.Tags{}
 		for k, v := range event.MetaData {
 			tags[k] = v
+			//println(k, v)
 		}
-
 		tags["layer idx"] = strconv.Itoa(layerIdx)
 		s, _ := tracer.StartSpanFromContext(
 			ctx,
