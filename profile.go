@@ -1,15 +1,12 @@
 package dnnl
 
 import (
-	"fmt"
 	"context"
-	"os"
+	"fmt"
 	"strconv"
 	"time"
 
-	"github.com/Unknwon/com"
 	opentracing "github.com/opentracing/opentracing-go"
-	"github.com/pkg/errors"
 	"github.com/rai-project/tracer"
 )
 
@@ -54,20 +51,20 @@ func (t Trace) Len() int           { return t.TraceEvents.Len() }
 func (t Trace) Swap(i, j int)      { t.TraceEvents.Swap(i, j) }
 func (t Trace) Less(i, j int) bool { return t.TraceEvents.Less(i, j) }
 
-func NewProfile(tmpDir string) (*Trace, error) {
-	if !com.IsDir(tmpDir) {
-		os.MkdirAll(tmpDir, os.FileMode(0755))
-	}
-	filename, err := tempFile(tmpDir, "profile-", ".out")
-	if err != nil {
-		return nil, errors.Errorf("cannot create temporary file in %v", tmpDir)
-	}
-	verboseOut := ParseVerbose("/Users/apple/go-mkl-dnn/example/verbose_example_output")
-	fmt.Println(filename)
+func NewProfile(filepath string) (*Trace, error) {
+	// if !com.IsDir(tmpDir) {
+	// 	os.MkdirAll(tmpDir, os.FileMode(0755))
+	// }
+	// filename, err := tempFile(tmpDir, "profile-", ".out")
+	// if err != nil {
+	// 	return nil, errors.Errorf("cannot create temporary file in %v", tmpDir)
+	// }
+	verboseOut := ParseVerbose(filepath)
+	// fmt.Println(filename)
 	fmt.Println(startTime)
 	return &Trace{
 		TraceEvents: verboseOut,
-		filename:    filename,
+		filename:    filepath,
 		StartTime:   startTime,
 		EndTime:     startTime,
 	}, nil

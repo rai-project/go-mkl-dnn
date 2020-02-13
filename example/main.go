@@ -2,32 +2,41 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
+
 	//"strconv"
 	"context"
+
 	dnnl "github.com/rai-project/go-mkl-dnn"
 	"github.com/rai-project/tracer"
-  _ "github.com/rai-project/tracer/all"
+	_ "github.com/rai-project/tracer/all"
 )
 
 func main() {
 	defer tracer.Close()
 	//layerinfo := dnnl.ParseVerbose("verbose_example_output")
 	//fmt.Println("in main function")
-	trace, _ := dnnl.NewProfile("/Users/apple/go-mkl-dnn/example/")
+	pwd, err := os.Getwd()
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	trace, _ := dnnl.NewProfile(filepath.Join(pwd, "verbose_example_output"))
 	// for t := range trace.TraceEvents {
 	// 	println(trace.TraceEvents[t].OpName)
 	// 	println(trace.TraceEvents[t].ExeTime)
 	// }
 	//fmt.Println(trace.TraceEvents.Len())
 	ctx := context.Background()
-  span, ctx = tracer.StartSpanFromContext(ctx, tracer.FULL_TRACE, "example")
+	span, ctx := tracer.StartSpanFromContext(ctx, tracer.FULL_TRACE, "example")
 	defer span.Finish()
-
-	e := trace.Publish(ctx,tracer.FULL_TRACE, )
+	// _ = span
+	e := trace.Publish(ctx, tracer.FULL_TRACE)
 	if e != nil {
 		fmt.Println("Failed to publish tracer")
 	}
-	
+
 	// for i := range layerinfo {
 	// 	fmt.Println("layer " + strconv.Itoa(i+1))
 	// 	// fmt.Println("Operation name: " + layerinfo[i].OpName)
@@ -40,6 +49,7 @@ func main() {
 	// 	}
 	// }
 }
+
 // import (
 // 	"fmt"
 // 	"os"
