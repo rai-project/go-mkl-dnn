@@ -6,6 +6,7 @@ import (
 	"context"
 	dnnl "github.com/rai-project/go-mkl-dnn"
 	"github.com/rai-project/tracer"
+  _ "github.com/rai-project/tracer/all"
 )
 
 func main() {
