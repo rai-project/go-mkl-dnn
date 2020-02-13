@@ -19,6 +19,9 @@ func main() {
 	// }
 	//fmt.Println(trace.TraceEvents.Len())
 	ctx := context.Background()
+  span, ctx = tracer.StartSpanFromContext(ctx, tracer.FULL_TRACE, "example")
+	defer span.Finish()
+
 	e := trace.Publish(ctx,tracer.FULL_TRACE, )
 	if e != nil {
 		fmt.Println("Failed to publish tracer")
