@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strings"
 	"regexp"
+	"strings"
 	"time"
 )
 
@@ -43,7 +43,12 @@ func ParseVerbose(fName string) TraceEvents {
 			layer := new(TraceEvent)
 			layer.OpName = line[2]
 			//f, _ := strconv.ParseFloat(line[len(line)-1], 64)
-			layer.ExeTime, _ = time.ParseDuration(line[len(line)-1]+"ms")
+
+			layer.ExeTime, err = time.ParseDuration(line[len(line)-1] + "ms")
+			// pp.Println(layer.ExeTime.String() + "    " + line[len(line)-1] + "ms")
+			if err != nil {
+				panic(err)
+			}
 			layer.Propogation = line[4]
 			layer.DataFormat = line[5]
 			meta := make(map[string]string)
@@ -56,7 +61,7 @@ func ParseVerbose(fName string) TraceEvents {
 			}
 			if len(line[7]) != 0 {
 				match, _ := regexp.MatchString("([0-9]+)x", line[7])
-				if(match) {
+				if match {
 					meta["dimension"] = line[7]
 				} else {
 					dim := strings.Join(strings.Split(line[7], "_"), "")
@@ -82,5 +87,3 @@ func ParseVerbose(fName string) TraceEvents {
 
 	return verboseOut
 }
-
-

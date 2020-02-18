@@ -2,7 +2,6 @@ package dnnl
 
 import (
 	"context"
-	"fmt"
 	"strconv"
 	"time"
 
@@ -43,8 +42,6 @@ func (t TraceEvents) Less(i, j int) bool { return t[i].Timestamp < t[j].Timestam
 type Trace struct {
 	TraceEvents TraceEvents
 	filename    string
-	StartTime   time.Time
-	EndTime     time.Time
 }
 
 func (t Trace) Len() int           { return t.TraceEvents.Len() }
@@ -60,19 +57,20 @@ func NewProfile(filepath string) (*Trace, error) {
 	// 	return nil, errors.Errorf("cannot create temporary file in %v", tmpDir)
 	// }
 	verboseOut := ParseVerbose(filepath)
-	// fmt.Println(filename)
-	fmt.Println(startTime)
 	return &Trace{
 		TraceEvents: verboseOut,
 		filename:    filepath,
-		StartTime:   startTime,
-		EndTime:     startTime,
 	}, nil
 }
 
 func (t *Trace) Publish(ctx context.Context, lvl tracer.Level, opts ...opentracing.StartSpanOption) error {
 
-	accumTime := t.StartTime
+	// parentCtx = opentracing.SpanFromContext(ctx)
+	// if parentCtx == nil {
+	// 	return errors.New("cannot find parent ctx")
+	// }
+
+	accumTime := startTime
 	layerIdx := 0
 
 	for _, event := range t.TraceEvents {
@@ -81,7 +79,7 @@ func (t *Trace) Publish(ctx context.Context, lvl tracer.Level, opts ...opentraci
 			tags[k] = v
 			//println(k, v)
 		}
-		tags["layer idx"] = strconv.Itoa(layerIdx)
+		tags["layer_idx"] = strconv.Itoa(layerIdx)
 		s, _ := tracer.StartSpanFromContext(
 			ctx,
 			lvl,
@@ -93,20 +91,17 @@ func (t *Trace) Publish(ctx context.Context, lvl tracer.Level, opts ...opentraci
 		if s == nil {
 			continue
 		}
-
-		accumTime.Add(event.ExeTime)
-
+		accumTime = accumTime.Add(event.ExeTime)
+		// pp.Println(accumTime.UnixNano())
 		// duration := endTime.Sub(startEntry.startTime).Nanoseconds()
 		s.
 			// SetTag("end_timestamp", timeUnit*time.Duration(event.Timestamp)).
-			// SetTag("endtime", endTime).
-			// SetTag("duration(ns)", duration).
+			SetTag("endtime", accumTime).
+			SetTag("duration(ns)", event.ExeTime).
 			FinishWithOptions(opentracing.FinishOptions{
 				FinishTime: accumTime,
 			})
 	}
-
-	t.EndTime = accumTime
 
 	return nil
 }

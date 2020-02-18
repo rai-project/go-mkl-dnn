@@ -6,6 +6,7 @@ var (
 	startTime time.Time
 )
 
-func init() {
+func UpdateStartTime() {
 	startTime = time.Now()
+
 }
