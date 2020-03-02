@@ -30,7 +30,6 @@ func ParseVerbose(fName string) TraceEvents {
 		log.Fatal(err)
 	}
 	defer f.Close()
-
 	verboseOut := TraceEvents{}
 
 	s := bufio.NewScanner(f)
@@ -43,18 +42,15 @@ func ParseVerbose(fName string) TraceEvents {
 			layer := new(TraceEvent)
 			layer.OpName = line[2]
 			//f, _ := strconv.ParseFloat(line[len(line)-1], 64)
-
 			layer.ExeTime, err = time.ParseDuration(line[len(line)-1] + "ms")
-			// pp.Println(layer.ExeTime.String() + "    " + line[len(line)-1] + "ms")
+
 			if err != nil {
 				panic(err)
 			}
 			layer.Propogation = line[4]
 			layer.DataFormat = line[5]
 			meta := make(map[string]string)
-			// if len(line[3]) != 0 {
-			// 	meta["jit"] = strings.Split(line[3], ":")[1]
-			// }
+
 			if len(line[6]) != 0 {
 				temp := strings.Split(line[6], ":")
 				meta[temp[0]] = temp[1]
@@ -84,6 +80,5 @@ func ParseVerbose(fName string) TraceEvents {
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	return verboseOut
 }

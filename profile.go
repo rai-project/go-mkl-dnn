@@ -4,7 +4,6 @@ import (
 	"context"
 	"strconv"
 	"time"
-
 	opentracing "github.com/opentracing/opentracing-go"
 	"github.com/rai-project/tracer"
 )
@@ -63,16 +62,14 @@ func NewProfile(filepath string) (*Trace, error) {
 	}, nil
 }
 
-func (t *Trace) Publish(ctx context.Context, lvl tracer.Level, opts ...opentracing.StartSpanOption) error {
+func (t *Trace) Publish(start time.Time, ctx context.Context, lvl tracer.Level, opts ...opentracing.StartSpanOption) (time.Time, error) {
 
 	// parentCtx = opentracing.SpanFromContext(ctx)
 	// if parentCtx == nil {
 	// 	return errors.New("cannot find parent ctx")
 	// }
-
-	accumTime := startTime
+	accumTime := start
 	layerIdx := 0
-
 	for _, event := range t.TraceEvents {
 		tags := opentracing.Tags{}
 		for k, v := range event.MetaData {
@@ -87,21 +84,22 @@ func (t *Trace) Publish(ctx context.Context, lvl tracer.Level, opts ...opentraci
 			opentracing.StartTime(accumTime),
 			tags,
 		)
-
 		if s == nil {
 			continue
 		}
+
 		accumTime = accumTime.Add(event.ExeTime)
-		// pp.Println(accumTime.UnixNano())
-		// duration := endTime.Sub(startEntry.startTime).Nanoseconds()
+		// //fmt.Println(accumTime.String())
+		// // pp.Println(accumTime.UnixNano())
+		// // duration := endTime.Sub(startEntry.startTime).Nanoseconds()
 		s.
-			// SetTag("end_timestamp", timeUnit*time.Duration(event.Timestamp)).
+		// 	// SetTag("end_timestamp", timeUnit*time.Duration(event.Timestamp)).
 			SetTag("endtime", accumTime).
-			SetTag("duration(ns)", event.ExeTime).
+			SetTag("duration(us)", event.ExeTime).
 			FinishWithOptions(opentracing.FinishOptions{
 				FinishTime: accumTime,
 			})
+		
 	}
-
-	return nil
+	return accumTime, nil
 }

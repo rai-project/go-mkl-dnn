@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-
+	"time"
 	//"strconv"
 	"context"
 
@@ -12,6 +12,7 @@ import (
 	dnnl "github.com/rai-project/go-mkl-dnn"
 	"github.com/rai-project/tracer"
 	_ "github.com/rai-project/tracer/all"
+	opentracing "github.com/opentracing/opentracing-go"
 )
 
 var configOptions = []config.Option{
@@ -38,58 +39,32 @@ func main() {
 	// 	println(trace.TraceEvents[t].ExeTime)
 	// }
 	//fmt.Println(trace.TraceEvents.Len())
-	ctx := context.Background()
-	span, ctx := tracer.StartSpanFromContext(ctx, tracer.NO_TRACE, "example")
-	dnnl.UpdateStartTime()
-	// pp.Println(span)
-	_ = span
-	_ = trace
-	e := trace.Publish(ctx, tracer.FULL_TRACE)
+	//ctx := context.Background()
+	t := time.Now()
+	span, ctx := tracer.StartSpanFromContext(context.Background(), tracer.MODEL_TRACE, "alexnet", opentracing.StartTime(t))
+	acc, e := trace.Publish(t, ctx, tracer.FULL_TRACE)
 	if e != nil {
 		fmt.Println("Failed to publish tracer")
 	}
-	span.Finish()
-
-	// for i := range layerinfo {
-	// 	fmt.Println("layer " + strconv.Itoa(i+1))
-	// 	// fmt.Println("Operation name: " + layerinfo[i].OpName)
-	// 	// fmt.Println("Execution time: " + layerinfo[i].ExeTime)
-	// 	// fmt.Println("Data format: " + layerinfo[i].DataFormat)
-	// 	// fmt.Println("Propogation type" + layerinfo[i].Propogation)
-	// 	// fmt.Println("Metadata: " + layerinfo[i].MetaData)
-	// 	for key, value := range layerinfo[i].MetaData {
-	// 		fmt.Println(key, value)
-	// 	}
-	// }
+	span.
+	SetTag("endtime", acc).
+	FinishWithOptions(opentracing.FinishOptions{
+		FinishTime: acc,
+	})	
+	//defer span.Finish()
+	
+	// pp.Println(span)
+	//_ = span
+	//_ = trace
+	//dnnl.UpdateStartTime()
+	
+	
+	// span.
+	// SetTag("endtime", acc).
+	// FinishWithOptions(opentracing.FinishOptions{
+	// 	FinishTime: acc,
+	// })
+	
+	//span.Finish()
 }
 
-// import (
-// 	"fmt"
-// 	"os"
-// 	dnnl "github.com/rai-project/go-mkl-dnn"
-// 	"github.com/opentracing/opentracing-go/log"
-// )
-// func main() {
-// 	if len(os.Args) != 2 {
-// 		panic("ERROR: Expecting one argument")
-// 	}
-
-// 	tracer, closer := dnnl.InitJaeger("hello-world")
-// 	defer closer.Close()
-
-// 	helloTo := os.Args[1]
-
-// 	span := tracer.StartSpan("say-hello")
-// 	span.SetTag("hello-to", helloTo)
-
-// 	helloStr := fmt.Sprintf("Hello, %s!", helloTo)
-// 	span.LogFields(
-// 		log.String("event", "string-format"),
-// 		log.String("value", helloStr),
-// 	)
-
-// 	println(helloStr)
-// 	span.LogKV("event", "println")
-
-// 	span.Finish()
-// }
